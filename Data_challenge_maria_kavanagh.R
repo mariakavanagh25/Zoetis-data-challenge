@@ -15,7 +15,6 @@ sales <- rename (sales, CUSTOMER_NAME_y = CUSTOMER_NAME )
 acc_sales <- data.frame()
 
 ### First JOIN based on wildcards (797 matches)
-
 x <- sqldf('SELECT *
             FROM account acc
             LEFT JOIN sales s 
@@ -27,7 +26,7 @@ acc_sales <- rbind(acc_sales, x%>% filter(CUSTOMER_NAME_y !='NA') )
 acc_sales <- rename(acc_sales, CUSTOMER_NAME.x = CUSTOMER_NAME_x)
 acc_sales <- rename(acc_sales, CUSTOMER_NAME.y = CUSTOMER_NAME_y)
 
-check <- (nrow(account) - nrow(acc_sales))
+unmatched <- (nrow(account) - nrow(acc_sales))
 
 for (i in 1:10) {
   
@@ -43,6 +42,6 @@ for (i in 1:10) {
   acc_sales <- rbind(acc_sales, x %>% filter(CUSTOMER_NAME.y !='NA'))
 
   check <- (nrow(account) - nrow(acc_sales))
-  if (check < 1 ) break;
+  if (unmatched < 1 ) break;
 } 
 
